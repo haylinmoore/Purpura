@@ -5,10 +5,10 @@ const express = require('express')
 const app = express()
 const getter = require('pixel-getter');
 
-var request = require('request').defaults({
+const request = require('request').defaults({
   encoding: null
 });
-var sizeOf = require('image-size');
+const sizeOf = require('image-size');
 
 function componentToHex(c) {
   const hex = c.toString(16);
@@ -28,11 +28,15 @@ app.get('/', function (req, res) {
 app.get('*', function (req, res) {
   try {
 
+
+    // Grab the image
     request.get(req.originalUrl.substring(1), function (error, response, body) {
       if (!error && response.statusCode == 200) {
 
+        //Get its size
         var msize = sizeOf(new Buffer(body));
-
+        
+        //Get all of its pixels
         getter.get(new Buffer(body), (err, pixels) => {
           if (err) {
             res.send(err);
